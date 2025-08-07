@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QTabWidget, QApplication, QMainWindow,QVBoxLayout, QWidget
 from PyQt6.QtCore import QSize
-from account_splitter import AccountSplitter
-from nominal_changer import NominalChanger
+from module.account_splitter import AccountSplitter
+from module.nominal_changer import NominalChanger
 
 class MainWindow(QMainWindow):
     def __init__(self):

@@ -64,7 +64,6 @@ class NominalChanger(QMainWindow):
         self.button_process.clicked.connect(self.process_file)
     
     # Functions
-        
     def file_handler(self):
         file_name, _ = QFileDialog.getOpenFileName(self,caption='Open CSV File',filter="CSV Files (*.csv)")
         self.label_choosed_file.setText(file_name)
@@ -91,19 +90,20 @@ class NominalChanger(QMainWindow):
     
     def writing_file(self):
         csv_header = [
-                        'NO',
-                        'NAMA_SUPPLIER',
-                        'NAMA_PEMILIK_REKENING',
-                        'NO_REKENING',
-                        'JUMLAH_UANG']
+            'NO',
+            'NAMA_SUPPLIER',
+            'NAMA_PEMILIK_REKENING',
+            'NO_REKENING',
+            'JUMLAH_UANG']
                 
         with open(self.raw_file_name, 'r', encoding='utf8') as csv_reader:
             reader = csv.DictReader(csv_reader, delimiter='|')
             for index, data in enumerate(reader, start=1):
-                if data['JUMLAH_UANG'] == self.first_nominal:
-                    data['JUMLAH_UANG'] = self.last_nominal
-                data['NO'] = index
-                self.nominal_update_list.append(data)
+                if data:
+                    if data['JUMLAH_UANG'] == self.first_nominal:
+                        data['JUMLAH_UANG'] = self.last_nominal
+                    data['NO'] = index
+                    self.nominal_update_list.append(data)
         
         with open(self.saved_file_name, 'w', encoding='utf8', newline='') as csv_writer:
             writer = csv.DictWriter(csv_writer, delimiter='|', fieldnames=csv_header)
