@@ -99,9 +99,10 @@ class NominalChanger(QMainWindow):
                 
         with open(self.raw_file_name, 'r', encoding='utf8') as csv_reader:
             reader = csv.DictReader(csv_reader, delimiter='|')
-            for data in reader:
+            for index, data in enumerate(reader, start=1):
                 if data['JUMLAH_UANG'] == self.first_nominal:
                     data['JUMLAH_UANG'] = self.last_nominal
+                data['NO'] = index
                 self.nominal_update_list.append(data)
         
         with open(self.saved_file_name, 'w', encoding='utf8', newline='') as csv_writer:
@@ -110,9 +111,6 @@ class NominalChanger(QMainWindow):
             writer.writerows(self.nominal_update_list)
             
             QMessageBox.information(self, 'Sukses', 'File Sudah Diproses')
-    
-    def ordering_number(self):
-        ...
         
 if __name__ == '__main__':
     app = QApplication([])

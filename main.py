@@ -7,7 +7,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle('CSV Bulanan Modifier')
-        self.setFixedSize(QSize(357,323))
+        self.setFixedSize(QSize(357,300))
         self.setContentsMargins(6,6,6,6)
         
         self.account_splitter = AccountSplitter()
