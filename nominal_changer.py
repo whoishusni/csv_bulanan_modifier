@@ -15,25 +15,25 @@ class NominalChanger(QMainWindow):
         self.setFixedSize(QSize(323,230))
         
         # Initialize Widget
-        self.label_file_location = QLabel('Lokasi File CSV')
-        self.label_choosed_file = QLabel('Belum Ada File Dipilih')
+        self.label_file_location = QLabel('Lokasi File CSV',self)
+        self.label_choosed_file = QLabel('Belum Ada File Dipilih',self)
         self.label_choosed_file.setStyleSheet("font-style: italic; color: yellow;")
         
-        self.button_file_dialog = QPushButton('Pilih File')
+        self.button_file_dialog = QPushButton('Pilih File',self)
         
-        self.label_first_nominal = QLabel('Nominal Awal')
-        self.edit_first_nominal = QLineEdit()
+        self.label_first_nominal = QLabel('Nominal Awal',self)
+        self.edit_first_nominal = QLineEdit(self)
         self.edit_first_nominal.setPlaceholderText('Hanya Input Angka...')
         self.edit_first_nominal.setValidator(QIntValidator())
         
-        self.label_last_nominal = QLabel('Nominal Akhir')
-        self.edit_last_nominal = QLineEdit()
+        self.label_last_nominal = QLabel('Nominal Akhir',self)
+        self.edit_last_nominal = QLineEdit(self)
         self.edit_last_nominal.setPlaceholderText('Hanya Input Angka...')
         self.edit_last_nominal.setValidator(QIntValidator())
         
-        self.button_process = QPushButton('Proses Data')
+        self.button_process = QPushButton('Proses Data',self)
         
-        self.copyright_label = QLabel('© 2025 Husni')
+        self.copyright_label = QLabel('© 2025 Husni',self)
         
         # Layout Setting
         layout = QGridLayout()
@@ -54,7 +54,7 @@ class NominalChanger(QMainWindow):
         layout.addWidget(self.copyright_label,7,0,1,2, Qt.AlignmentFlag.AlignCenter)
         
         # Container Setting
-        container = QWidget()
+        container = QWidget(self)
         container.setLayout(layout)
         
         self.setCentralWidget(container)
