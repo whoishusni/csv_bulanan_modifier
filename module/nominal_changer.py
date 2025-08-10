@@ -4,7 +4,6 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import QSize, Qt
 from PyQt6.QtGui import QIntValidator
 import csv
-from urllib.parse import urlparse
 import os
 
 class NominalChanger(QMainWindow):
@@ -16,7 +15,7 @@ class NominalChanger(QMainWindow):
         
         # Initialize Widget
         self.label_file_location = QLabel('Lokasi File CSV',self)
-        self.label_choosed_file = QLabel('Belum Ada File Dipilih',self)
+        self.label_choosed_file = QLabel('Belum Ada File Terpilih',self)
         self.label_choosed_file.setStyleSheet("font-style: italic; color: yellow;")
         
         self.button_file_dialog = QPushButton('Pilih File',self)
@@ -61,21 +60,21 @@ class NominalChanger(QMainWindow):
         
         # Widget Signal / Slot / Event
         self.button_file_dialog.clicked.connect(self.file_handler)
-        self.button_process.clicked.connect(self.process_file)
+        self.button_process.clicked.connect(self.process_change_handler)
     
     # Functions
     def file_handler(self):
-        file_name, _ = QFileDialog.getOpenFileName(self,caption='Open CSV File',filter="CSV Files (*.csv)")
-        self.label_choosed_file.setText(file_name)
+        file_path, _ = QFileDialog.getOpenFileName(self,caption='Open CSV File',filter="CSV Files (*.csv)")
+        self.label_choosed_file.setText(file_path)
         
-    def process_file(self):
+    def process_change_handler(self):
         self.nominal_update_list: list = []
-        self.raw_file_name = self.label_choosed_file.text()
-        self.first_nominal = self.edit_first_nominal.text().strip()
-        self.last_nominal = self.edit_last_nominal.text().strip()
-        base_name = os.path.basename(self.raw_file_name)
+        self.fullpath_filename: str = self.label_choosed_file.text()
+        self.first_nominal: str = self.edit_first_nominal.text().strip()
+        self.last_nominal: str = self.edit_last_nominal.text().strip()
+        base_name: str = os.path.basename(self.fullpath_filename)
         self.file_name, self.file_extension = os.path.splitext(base_name)
-        self.saved_file_name = f'{self.file_name}_MODIFIED{self.file_extension}'
+        self.saved_file_name: str = f'{self.file_name}_MODIFIED{self.file_extension}'
         
         if self.first_nominal == '' and self.last_nominal == '':
             QMessageBox.warning(self, 'Error', 'Nominal Awal / Nominal Akhir Kosong')
@@ -83,33 +82,37 @@ class NominalChanger(QMainWindow):
         
         else: 
             try:
+                self.reading_file()
                 self.writing_file()
                     
             except FileNotFoundError:
                 QMessageBox.warning(self, 'Error', 'File Belum Dipilih')
     
+    def reading_file(self):
+        # open and read choosen file
+        with open(self.fullpath_filename, 'r', encoding='utf8') as csv_reader:
+            reader = csv.DictReader(csv_reader, delimiter='|')
+            for index, data in enumerate(reader, start=1):
+                if data:
+                    # replace number
+                    if data['JUMLAH_UANG'] == self.first_nominal:
+                        data['JUMLAH_UANG'] = self.last_nominal
+                    data['NO'] = index
+                    # save file to list
+                    self.nominal_update_list.append(data)
+
     def writing_file(self):
-        csv_header = [
+        csv_header: list = [
             'NO',
             'NAMA_SUPPLIER',
             'NAMA_PEMILIK_REKENING',
             'NO_REKENING',
             'JUMLAH_UANG']
-                
-        with open(self.raw_file_name, 'r', encoding='utf8') as csv_reader:
-            reader = csv.DictReader(csv_reader, delimiter='|')
-            for index, data in enumerate(reader, start=1):
-                if data:
-                    if data['JUMLAH_UANG'] == self.first_nominal:
-                        data['JUMLAH_UANG'] = self.last_nominal
-                    data['NO'] = index
-                    self.nominal_update_list.append(data)
-        
+          
         with open(self.saved_file_name, 'w', encoding='utf8', newline='') as csv_writer:
             writer = csv.DictWriter(csv_writer, delimiter='|', fieldnames=csv_header)
             writer.writeheader()
             writer.writerows(self.nominal_update_list)
-            
             QMessageBox.information(self, 'Sukses', 'File Sudah Diproses')
         
 if __name__ == '__main__':
