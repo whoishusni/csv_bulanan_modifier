@@ -10,6 +10,11 @@ import shutil
 class AccountSplitter(QMainWindow):
     def __init__(self):
         super().__init__()
+        
+        #list init
+        self.mandiri_list: list = []
+        self.bsi_list: list = []
+        
         # window init
         self.setWindowTitle('Account Splitter')
         self.setFixedSize(QSize(323,230))
@@ -47,9 +52,6 @@ class AccountSplitter(QMainWindow):
     
     def split_data_handler(self):
         try:
-            self.mandiri_list: list = []
-            self.bsi_list: list = []
-            
             self.fullpath_filename: str = self.label_file_name.text()
             self.base_name: str = os.path.basename(self.fullpath_filename)
             self.filename, self.fileextension = os.path.splitext(self.base_name)
