@@ -11,7 +11,8 @@
 2. Microsoft Visual Studio Code
 3. [PyQt6](https://pypi.org/project/PyQt6)
 4. [Auto-Py-To-Exe](https://pypi.org/project/auto-py-to-exe)
-5. see requirements.txt
+5. [Streamlit](https://streamlit.io/#install) using for microweb tech
+6. see requirements.txt
 ## Installation
 If you're using "Windows" and want to use the application directly, please go directly to the [Release Page](https://github.com/whoishusni/csv_bulanan_modifier/releases). However, if you'd prefer to run the application using Visual Studio Code, follow the steps below.
 1. open terimal / cmd,  and clone the project `git clone https://github.com/whoishusni/csv_bulanan_modifier.git`
